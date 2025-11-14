@@ -2,30 +2,30 @@ import { useEffect, useState } from "react";
 import { useAuth } from "./Auth";
 import { Link } from "react-router";
 
-export function Usuarios() {
+export function pacientes() {
     const { fetchAuth } = useAuth();
-    const [usuarios, setUsuarios] = useState([]);
+    const [pacientes, setPacientes] = useState([]);
 
 
     useEffect(() => {
-        const fetchUsuarios = async () => {
-            const response = await fetchAuth("http://localhost:3000/usuarios")
+        const fetchPacientes = async () => {
+            const response = await fetchAuth("http://localhost:3000/pacientes")
             const data = await response.json();
             if (!response.ok) {
                 console.log("Error:", data.error);
                 return;
             }
 
-            setUsuarios(data.usuarios);
+            setPacientes(data.pacientes);
         }
 
-        fetchUsuarios();
+        fetchPacientes();
     }, [fetchAuth]);
 
     const handleQuitar = async (id) => {
-        if (!window.confirm("¿Estás seguro de que quieres eliminar este usuario?")) return;
+        if (!window.confirm("¿Estás seguro de que quieres eliminar este paciente?")) return;
 
-        const response = await fetchAuth(`http://localhost:3000/usuarios/${id}`, {
+        const response = await fetchAuth(`http://localhost:3000/pacientes/${id}`, {
             method: "DELETE",
         });
 
@@ -36,27 +36,31 @@ export function Usuarios() {
             return;
         }
 
-        setUsuarios(usuarios.filter((u) => u.id !== id));
+        setPacientes(pacientes.filter((u) => u.id !== id));
     };
 
     return (
             <article>
-                <h2>Usuarios</h2>
+                <h2>pacientes</h2>
                 <table>
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Email</th>
+                            <th>Apellido</th>
+                            <th>Dni</th>
+                            <th>Obra Social</th>
                             <th>Acciones</th>
                             </tr>
                     </thead>
                     <tbody>
-                        {usuarios.map((u) => (
+                        {pacientes.map((u) => (
                             <tr key={u.id}>
                                 <td>{u.nombre}</td>
-                                <td>{u.email}</td>
-                                <td><Link to={`/Usuarios/${u.id}/modificar`} role="button" className="secondary">Modificar</Link></td>
-                                <td><Link to={`/Usuarios/${u.id}`} role="button" className="secondary">Ver</Link></td>
+                                <td>{u.apellido}</td>
+                                <td>{u.dni}</td>
+                                <td>{u.obra_social}</td>
+                                <td><Link to={`/pacientes/${u.id}/modificar`} role="button" className="secondary">Modificar</Link></td>
+                                <td><Link to={`/pacientes/${u.id}`} role="button" className="secondary">Ver</Link></td>
                                 <button
                                     onClick={() => handleQuitar(u.id)}
                                     className="secondary"
@@ -67,7 +71,7 @@ export function Usuarios() {
                         ))}
                     </tbody>
                 </table>
-                <Link to="/Usuarios/crear" role="button">Crear nuevo usuario</Link>
+                <Link to="/pacientes/crear" role="button">Nuevo Paciente</Link>
             </article>
         );
 }
