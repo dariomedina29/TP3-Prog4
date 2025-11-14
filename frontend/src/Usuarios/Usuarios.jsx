@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "./Auth";
+import { useAuth } from "../Auth";
 import { Link } from "react-router";
 
 export function Usuarios() {
