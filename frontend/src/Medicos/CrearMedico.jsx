@@ -10,9 +10,8 @@ export const CrearUsuario = () => {
     const [values, setValues] = useState({
         nombre: "",
         apellido: "",
-        dni: "",
-        fecha_nacimiento: "",
-        obra_social: "",
+        especialidad: "",
+        matricula_profesional: "",
     });
 
     const handleSubmit = async (e) => {
@@ -20,7 +19,7 @@ export const CrearUsuario = () => {
 
         setErrores(null);
 
-        const response = await fetchAuth("http://localhost:3000/pacientes", {
+        const response = await fetchAuth("http://localhost:3000/medicos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -32,15 +31,15 @@ export const CrearUsuario = () => {
             if (response.status === 400) {
                 return setErrores(data.errores);
             }
-            return window.alert("Error al crear paciente");
+            return window.alert("Error al crear medicos");
         }
-        navigate("/paciente");
+        navigate("/medicos");
     };
 
 
 return (
     <article>
-      <h2>Crear paciente</h2>
+      <h2>Crear medico</h2>
       <form onSubmit={handleSubmit}>
         <fieldset>
           <label>
@@ -84,73 +83,51 @@ return (
             )}
           </label>
           <label>
-            Dni
+            Especialidad
             <input
               required
-              type="dni"
-              value={values.dni}
+              type="especialidad"
+              value={values.especialidad}
               onChange={(e) =>
-                setValues({ ...values, dni: e.target.value })
+                setValues({ ...values, especialidad: e.target.value })
               }
               aria-invalid={
-                errores && errores.some((e) => e.path === "dni")
+                errores && errores.some((e) => e.path === "especialidad")
               }
             />
             {errores && (
               <small>
                 {errores
-                  .filter((e) => e.path === "dni")
+                  .filter((e) => e.path === "especialidad")
                   .map((e) => e.msg)
                   .join(", ")}
               </small>
             )}
           </label>
           <label>
-            Fecha de Nacimiento
+            Matricula Profesional
             <input
               required
-              type="fecha_nacimiento"
-              value={values.fecha_nacimiento}
+              type="matricula_profesional"
+              value={values.matricula_profesional}
               onChange={(e) =>
-                setValues({ ...values, fecha_nacimiento: e.target.value })
+                setValues({ ...values, matricula_profesional: e.target.value })
               }
               aria-invalid={
-                errores && errores.some((e) => e.path === "fecha_nacimiento")
+                errores && errores.some((e) => e.path === "matricula_profesional")
               }
             />
             {errores && (
               <small>
                 {errores
-                  .filter((e) => e.path === "fecha_nacimiento")
-                  .map((e) => e.msg)
-                  .join(", ")}
-              </small>
-            )}
-          </label>
-          <label>
-            Obra Social
-            <input
-              required
-              type="obra_social"
-              value={values.obra_social}
-              onChange={(e) =>
-                setValues({ ...values, obra_social: e.target.value })
-              }
-              aria-invalid={
-                errores && errores.some((e) => e.path === "obra_social")
-              }
-            />
-            {errores && (
-              <small>
-                {errores
-                  .filter((e) => e.path === "obra_social")
+                  .filter((e) => e.path === "matricula_profesional")
                   .map((e) => e.msg)
                   .join(", ")}
               </small>
             )}
           </label>
         </fieldset>
-        <input type="submit" value="Crear Paciente" />
+        <input type="submit" value="Crear Medico" />
       </form>
     </article>
   );
