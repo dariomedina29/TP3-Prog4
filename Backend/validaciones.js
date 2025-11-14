@@ -22,12 +22,12 @@ export const validarMedico = [
     .notEmpty().withMessage("Es obligatorio el apellido")
     .isLength({ min:4, max: 50 }).withMessage("El nombre debe tener entre 4 y 50 caracteres"),
 
-    body("matricula")
+    body("matricula_profesional")
     .notEmpty().withMessage("Matricula es obligatorio")
-    .isLength({ min:9, max: 11 }).withMessage("La matricula debe tener entre 10 y 11 caracteres")
+    .isLength({ min:9, max: 11 }).withMessage("La matricula debe tener entre 9 y 10 caracteres")
     .custom(async (value, {req})=>{
         const [exist] = await db.execute(
-            "SELECT * FROM medicos WHERE matricula = ?",
+            "SELECT * FROM medicos WHERE matricula_profesional = ?",
             [value]
         );
 
@@ -56,7 +56,7 @@ export const validarPaciente = [
     .trim()
     .notEmpty().withMessage("Dni es obligatorio")
     .isNumeric().withMessage("Ingresar solo numeros")
-    .isLength({ min: 7, max: 8 }).withMessage("El Dni debe tener entre 7 y 8 digitos")
+    .isLength({ min: 7, max: 9 }).withMessage("El Dni debe tener entre 7 y 8 digitos")
     .custom(async (value, { req }) => {
         const [exist] = await db.execute(
             "SELECT * FROM pacientes WHERE dni = ?",
@@ -69,23 +69,6 @@ export const validarPaciente = [
 
         return true;
     }),
-
-    body("matricula")
-    .notEmpty().withMessage("Matricula es obligatorio")
-    .isLength({ min:9, max: 11 }).withMessage("La matricula debe tener entre 10 y 11 caracteres")
-    .custom(async (value, {req})=>{
-        const [exist] = await db.execute(
-            "SELECT * FROM medicos WHERE matricula = ?",
-            [value]
-        );
-
-        if (exist.length > 0 && exist[0].id !== Number(req.params.id)){
-            throw new Error("Ya existe esa matricula");
-        }
-        
-        return true;
-    }),
-
 
     body("fecha_nacimiento")
             .notEmpty().withMessage("Es obligatoria la fecha de nacimiento")
@@ -106,7 +89,7 @@ export const validarPaciente = [
                 return true;
             }),
 
-    body("obraSocial")
+    body("obra_social")
         .isString().withMessage("La obra social debe ser una cadena de texto")
         .not().isNumeric().withMessage("Solo letras")
         .notEmpty().withMessage("Campo obligatorio")
@@ -180,7 +163,7 @@ export const validarUsuario = [
         .trim()
         .notEmpty().withMessage("El email es obligatorio.")
         .isEmail().withMessage("Debe ser un email válido."),
-    body("password")
+    body("contraseña")
         .notEmpty().withMessage("La contraseña es obligatoria.")
         .isStrongPassword({
             minLength: 8,
@@ -191,3 +174,27 @@ export const validarUsuario = [
         })
 
 ];
+
+export const validarAuth = [
+    body("nombre").isAlphanumeric("es-ES").isLength({ max: 20 }),
+    body("contraseña").isStrongPassword({
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 0
+        }).withMessage("La contraseña debe tener al menos 8 caracteres, una mayuscula, una minuscula y un numero.")
+
+]
+
+export const verificarValidaciones = (req, res, next) => {
+  const validacion = validationResult(req);
+  if (!validacion.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: "Falla de validacion",
+      errores: validacion.array(),
+    });
+  }
+  next();
+};
