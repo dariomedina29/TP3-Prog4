@@ -1,0 +1,35 @@
+@url = http://localhost:3000
+
+###GET
+GET {{url}}/pacientes
+
+###GET
+GET {{url}}/pacientes/1
+
+###POST
+POST {{url}}/pacientes
+Content-Type: application/json
+
+{
+    "nombre": "Lionel",
+    "apellido": "Messi",
+    "dni": "44365789",
+    "fecha_nacimiento": "1999-09-21",
+    "obra_social": "osde" 
+}
+
+###PUT
+PUT {{url}}/pacientes/2
+Content-Type: application/json
+
+
+{
+    "nombre": "Eduardo",
+    "apellido": "Dominguez",
+    "dni": "45375799",
+    "fecha_nacimiento": "2000-11-14",
+    "obra_social": "osde" 
+}
+
+###DELETE
+DELETE {{url}}/pacientes/1

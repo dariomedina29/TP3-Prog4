@@ -1,0 +1,44 @@
+@url = http://localhost:3000
+
+###GET
+GET {{url}}/turnos
+
+###GET
+GET {{url}}/turnos/1
+
+###GET
+GET {{url}}/turnos/pacientes/1/turnos
+
+###GET
+GET {{url}}/turnos/medicos/1/turnos
+
+
+###POST
+POST {{url}}/turnos
+Content-Type: application/json
+
+{
+    "paciente_id": "1",
+    "medico_id": "1",
+    "fecha": "2025-11-30",
+    "hora": "11:00",
+    "estado": "atendido",
+    "observaciones":"Chequeo"
+}
+
+###PUT
+PUT {{url}}/turnos/1
+Content-Type: application/json
+
+
+{
+    "paciente_id": "1",
+    "medico_id": "1",
+    "fecha": "2025-11-21",
+    "hora": "12:30",
+    "estado": "pendiente",
+    "observaciones":"Analisis de sangre"
+}
+
+###DELETE
+DELETE {{url}}/turnos/1
