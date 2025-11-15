@@ -10,20 +10,20 @@ export const Ingresar = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(username, contraseña);
-
+    
     if (!nombre.trim() || !contraseña) {
              setError("El nombre de usuario y la contraseña son obligatorios.");
             return;
         }
 
-    }
- 
+    const result = await login(nombre, contraseña);
+    
     if (result.success) {
       setOpen(false);
     }
-  
 
+    }
+    
     return (
         <>
         <button onClick={() => setOpen(true)}>Ingresar</button>
@@ -42,7 +42,7 @@ export const Ingresar = () => {
                 <input
                     name="contraseña"
                     type="contraseña"
-                    value={password}
+                    value={contraseña}
                     onChange={(e) => setContraseña(e.target.value)}
                 />
                 {error && <p style={{ color: "red" }}>{error}</p>}

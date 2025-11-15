@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../Auth";
 import { useParams } from "react-router";
 
-export const DetallesUsuario = () => {
+export const DetallesPaciente = () => {
   const { fetchAuth } = useAuth();
   const { id } = useParams();
   const [paciente, setPaciente] = useState(null);

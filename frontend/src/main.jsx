@@ -5,8 +5,8 @@ import './index.css'
 import { Layout } from "./Layout.jsx";
 import { Home } from "./Home.jsx";
 import { AuthProvider, AuthPage } from './Auth.jsx'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Usuarios } from './Usuarios/Usuarios.jsx'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Usuarios } from './Usuarios/Usuarios.jsx';
 import { DetallesUsuario } from "./Usuarios/DetallesUsuario.jsx";
 import { CrearUsuario } from "./Usuarios/CrearUsuario.jsx";
 import { ModificarUsuario} from "./Usuarios/ModificarUsuarios.jsx";
@@ -14,10 +14,14 @@ import { CrearPaciente } from "./Pacientes/CrearPaciente.jsx";
 import { DetallesPaciente } from "./Pacientes/DetallesPaciente.jsx";
 import { ModificarPaciente } from "./Pacientes/ModificarPaciente.jsx";
 import { Pacientes } from "./Pacientes/Pacientes.jsx";
-import { Medicos } from "./Medicos/Medicos.jsx"
-import { CrearMedico } from "./Medicos/CrearMedico.jsx"
-import { DetallesMedico } from "./Medicos/DetallesMedico.jsx"
-import { ModificarMedico } from "./Medicos/ModificarMedico.jsx"
+import { Medicos } from "./Medicos/Medicos.jsx";
+import { CrearMedico } from "./Medicos/CrearMedico.jsx";
+import { DetallesMedico } from "./Medicos/DetallesMedico.jsx";
+import { ModificarMedico } from "./Medicos/ModificarMedico.jsx";
+import { ModificarTurno } from "./Turnos/ModificarTurno";
+import { CrearTurno } from "./Turnos/CrearTurno.jsx";
+import {DetallesTurno} from "./Turnos/DetallesTurno.jsx";
+import { Turnos } from "./Turnos/Turnos.jsx";
 
 
 
@@ -135,6 +139,41 @@ createRoot(document.getElementById('root')).render(
                 </AuthPage>
               }
             />
+        <Route
+        path="turnos"
+        element={
+          <AuthPage>
+            <Turnos />
+          </AuthPage>
+        }
+        />
+
+        <Route 
+        path="/turnos/:id"
+        element= {
+          <AuthPage>
+            <DetallesTurno/>
+          </AuthPage>
+        }
+        />
+
+        <Route
+        path="turnos/crear"
+        element= {
+          <AuthPage>
+            <CrearTurno/>
+          </AuthPage>
+        }
+        />
+
+        <Route
+        path="/turnos/:id/modificar"
+        element= {
+          <AuthPage>
+            <ModificarTurno/>
+          </AuthPage>
+        }/>
+
           </Route>
         </Routes >
       </BrowserRouter >

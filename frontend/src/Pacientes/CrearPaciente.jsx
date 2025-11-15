@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../Auth";
 import { useNavigate } from "react-router";
 
-export const CrearUsuario = () => {
+export const CrearPaciente = () => {
     const { fetchAuth } = useAuth();
     const navigate = useNavigate();
     const [errores, setErrores] = useState(null);

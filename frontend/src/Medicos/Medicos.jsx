@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../Auth";
 import { Link } from "react-router";
 
-export function pacientes() {
+export function Medicos() {
     const { fetchAuth } = useAuth();
     const [medicos, setMedicos] = useState([]);
 
@@ -16,7 +16,7 @@ export function pacientes() {
                 return;
             }
 
-            setMedicos(data.medicos);
+            setMedicos(data.data);
         }
 
         fetchMedicos();
@@ -36,7 +36,7 @@ export function pacientes() {
             return;
         }
 
-        setMedicos(medicos.filter((u) => u.id !== id));
+        setMedicos(medicos.filter((m) => m.id !== id));
     };
 
     return (
@@ -53,20 +53,22 @@ export function pacientes() {
                             </tr>
                     </thead>
                     <tbody>
-                        {medicos.map((u) => (
-                            <tr key={u.id}>
-                                <td>{u.nombre}</td>
-                                <td>{u.apellido}</td>
-                                <td>{u.especialidad}</td>
-                                <td>{u.matricula_profesional}</td>
-                                <td><Link to={`/medicos/${u.id}/modificar`} role="button" className="secondary">Modificar</Link></td>
-                                <td><Link to={`/medicos/${u.id}`} role="button" className="secondary">Ver</Link></td>
-                                <button
-                                    onClick={() => handleQuitar(u.id)}
+                        {medicos.map((m) => (
+                            <tr key={m.id}>
+                                <td>{m.nombre}</td>
+                                <td>{m.apellido}</td>
+                                <td>{m.especialidad}</td>
+                                <td>{m.matricula_profesional}</td>
+                                <td><Link to={`/medicos/${m.id}/modificar`} role="button" className="secondary">Modificar</Link></td>
+                                <td><Link to={`/medicos/${m.id}`} role="button" className="secondary">Ver</Link></td>
+                                <td>
+                                    <button
+                                    onClick={() => handleQuitar(m.id)}
                                     className="secondary"
                                 >
                                     Quitar
                                 </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

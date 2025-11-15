@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../Auth";
 import { useNavigate, useParams } from "react-router";
 
-export const ModificarUsuario = () => {
+export const ModificarPaciente = () => {
   const { fetchAuth } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();

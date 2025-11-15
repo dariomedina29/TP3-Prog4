@@ -57,12 +57,14 @@ export function Usuarios() {
                                 <td>{u.email}</td>
                                 <td><Link to={`/Usuarios/${u.id}/modificar`} role="button" className="secondary">Modificar</Link></td>
                                 <td><Link to={`/Usuarios/${u.id}`} role="button" className="secondary">Ver</Link></td>
-                                <button
+                                <td>
+                                    <button
                                     onClick={() => handleQuitar(u.id)}
                                     className="secondary"
                                 >
                                     Quitar
                                 </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
