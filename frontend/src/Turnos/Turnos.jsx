@@ -60,10 +60,10 @@ export const Turnos = () => {
                                 <td>{t.hora}</td>
                                 <td>{t.estado}</td>
                                 <td>
-                                    <Link to={`/Turnos/modificar/${t.id}`} className="secondary">
+                                    <Link to={`/turnos/modificar/${t.id}`} className="secondary">
                                         Modificar
                                     </Link>
-                                    <Link to={`/Turnos/${t.id}`} className="secondary">
+                                    <Link to={`/turnos/${t.id}`} className="secondary">
                                         Ver
                                     </Link>{" "}
                                     

@@ -132,7 +132,7 @@ createRoot(document.getElementById('root')).render(
             />
 
             <Route
-              path="medicos/editar/:id"
+              path="medicos/:id/modificar"
               element={
                 <AuthPage>
                   <ModificarMedico />
@@ -167,7 +167,7 @@ createRoot(document.getElementById('root')).render(
         />
 
         <Route
-        path="/turnos/:id/modificar"
+        path="/turnos/modificar/:id"
         element= {
           <AuthPage>
             <ModificarTurno/>

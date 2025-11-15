@@ -14,56 +14,85 @@ export const CrearTurno = () => {
     estado: "pendiente",
     observaciones: "",
   });
-   
-   const [pacientes, setPacientes] = useState([]);
-   const [medicos, setMedicos] = useState([]);
-   const [errores, setErrores] = useState(null);
 
-   const DatosPM = useCallback(async () => {
-        const responsePacientes = await fetchAuth("http://localhost:3000/pacientes");
-        const dataP = await response.json();
+  const [pacientes, setPacientes] = useState([]);
+  const [medicos, setMedicos] = useState([]);
+  const [errores, setErrores] = useState(null);
+
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const responsePacientes = await fetchAuth(
+          "http://localhost:3000/pacientes"
+        );
+        const dataP = await responsePacientes.json();
 
         if (!responsePacientes.ok || !dataP.success) {
-            console.log("Error al cargar pacientes");
-            return;
+          console.log("Error al cargar pacientes");
+          return;
         }
         setPacientes(dataP.data);
 
-        const responseMedicos = await fetchAuth("http://localhost:3000/medicos");
-        const dataM = await response.json();
+        const responseMedicos = await fetchAuth(
+          "http://localhost:3000/medicos"
+        );
+        const dataM = await responseMedicos.json();
 
         if (!responseMedicos.ok || !dataM.success) {
-            console.log("Error al cargar medicos");
-            return;
+          console.log("Error al cargar medicos");
+          return;
         }
         setMedicos(dataM.data);
-        DatosPM();
-    }, [fetchAuth]);
+      } catch (error) {
+        console.error("Error cargando datos para turnos:", error);
+      }
+    };
 
-    useEffect(() => {
-        responsePacientes();
-        responseMedicos();
-    }, [responsePacientes, responseMedicos]);
+    cargarDatos();
+  }, [fetchAuth]);
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetchAuth("http://localhost:3000/turnos", {
-      method: "POST",
-      body: JSON.stringify(values),
-    });
-    const data = await response.json();
+    setErrores(null);
 
-    if (!response.ok || !data.success) {
-      console.error(data);
-      return window.alert("Error al crear turno");
+    try {
+      const response = await fetchAuth("http://localhost:3000/turnos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        console.error(data);
+        if (response.status === 400 && data.errores) {
+          setErrores(data.errores);
+        } else {
+          window.alert("Error al crear turno");
+        }
+        return;
+      }
+
+      navigate("/turnos");
+    } catch (error) {
+      console.error("Error al crear turno:", error);
+      window.alert("Error inesperado al crear turno");
     }
-
-    navigate("/turnos");
   };
 
   return (
     <article>
       <h2>Nuevo Turno</h2>
+
+      {errores && (
+        <ul style={{ color: "red" }}>
+          {errores.map((err, i) => (
+            <li key={i}>{err.msg || err}</li>
+          ))}
+        </ul>
+      )}
+
       <form onSubmit={handleSubmit}>
         <fieldset>
           <label>
@@ -85,7 +114,7 @@ export const CrearTurno = () => {
           </label>
 
           <label>
-            Medico
+            Médico
             <select
               required
               value={values.medico_id}
@@ -93,7 +122,7 @@ export const CrearTurno = () => {
                 setValues({ ...values, medico_id: e.target.value })
               }
             >
-              <option value="">Seleccione un medico</option>
+              <option value="">Seleccione un médico</option>
               {medicos.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.nombre} {m.apellido} - {m.especialidad}
@@ -126,7 +155,9 @@ export const CrearTurno = () => {
             Estado
             <select
               value={values.estado}
-              onChange={(e) => setValues({ ...values, estado: e.target.value })}
+              onChange={(e) =>
+                setValues({ ...values, estado: e.target.value })
+              }
             >
               <option value="pendiente">Pendiente</option>
               <option value="atendido">Atendido</option>
@@ -148,14 +179,4 @@ export const CrearTurno = () => {
       </form>
     </article>
   );
-
-    
-
-
-
-
-
-
-
-}
-
+};

@@ -73,7 +73,7 @@ export function Medicos() {
                         ))}
                     </tbody>
                 </table>
-                <Link to="/pacientes/crear" role="button">Nuevo Medico</Link>
+                <Link to="/medicos/crear" role="button">Nuevo Medico</Link>
             </article>
         );
 }

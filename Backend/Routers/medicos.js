@@ -42,11 +42,38 @@ router.put("/:id", validarId, validarMedico, verificarValidaciones, async(req, r
     res.status(201).json({success: true, data: {id, nombre, apellido, especialidad, matricula_profesional},});
 });
 
-router.delete("/:id", validarId, validarMedico, verificarValidaciones, async(req, res)=>{
+router.delete("/:id", validarId, verificarValidaciones, async (req, res) => {
     const id = Number(req.params.id);
 
-    await db.execute("DELETE FROM medicos WHERE id=?", [id]);
-    res.json({success: true, data: id});
+    try {
+        const [result] = await db.execute(
+            "DELETE FROM medicos WHERE id = ?",
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Médico no encontrado" });
+        }
+
+        res.json({ success: true, data: id });
+    } catch (error) {
+        console.error("Error al eliminar médico:", error);
+
+        if (error.code === "ER_ROW_IS_REFERENCED_2") {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "No se puede eliminar el médico porque tiene turnos asociados",
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Error interno al eliminar médico",
+        });
+    }
 });
 
 export default router;

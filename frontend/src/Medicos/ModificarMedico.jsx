@@ -1,108 +1,117 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../Auth";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 
-export const ModificarMedico = () => {
-  const { fetchAuth } = useAuth();
-  const { id } = useParams();
-  const navigate = useNavigate();
+export function ModificarMedico() {
+    const { fetchAuth } = useAuth();
+    const { id } = useParams();
+    const navigate = useNavigate();
 
-  const [values, setValues] = useState(null);
+    const [values, setValues] = useState(null);
+    const [errores, setErrores] = useState(null);
 
-  const fetchPaciente = useCallback(async () => {
-    const response = await fetchAuth(`http://localhost:3000/pacientes/${id}`);
-    const data = await response.json();
+    const fetchMedico = useCallback(async () => {
+        const response = await fetchAuth(`http://localhost:3000/medicos/${id}`);
+        const data = await response.json();
 
-    if (!response.ok || !data.success) {
-      console.log("Error al consultar por paciente:", data.error);
-      return;
-    }
-    setValues(data.usuario);
-  }, [fetchAuth, id]);
+        if (!response.ok || !data.success) {
+            console.log("Error:", data.message);
+            return;
+        }
 
-  useEffect(() => {
-    fetchPaciente();
-  }, [fetchPaciente]);
+        setValues(data.data);
+    }, [fetchAuth, id]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(values);
+    useEffect(() => {
+        fetchMedico();
+    }, [fetchMedico]);
 
-    const response = await fetchAuth(`http://localhost:3000/pacientes/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrores(null);
 
-    const data = await response.json();
+        const response = await fetchAuth(`http://localhost:3000/medicos/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(values)
+        });
 
-    if (!response.ok || !data.success) {
-      return window.alert("Error al modificar paciente");
-    }
+        const data = await response.json();
 
-    navigate("/pacientes");
-  };
+        if (!response.ok) {
+            setErrores(data.errores || [{ msg: data.message }]);
+            return;
+        }
 
-  if (!values) {
-    return null;
-  }
+        navigate("/medicos");
+    };
 
-  return (
-    <article>
-      <h2>Modificar paciente</h2>
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <label>
-            Nombre
-            <input
-              required
-              value={values.nombre}
-              onChange={(e) =>
-                setValues({ ...values, nombre: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Apellido
-            <input
-              required
-              value={values.apellido}
-              onChange={(e) => setValues({ ...values, apellido: e.target.value })}
-            />
-          </label>
-          <label>
-            Dni
-            <input
-              required
-              value={values.dni}
-              onChange={(e) =>
-                setValues({ ...values, dni: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Fecha de Nacimiento
-            <input
-              required
-              value={values.fecha_nacimiento}
-              onChange={(e) =>
-                setValues({ ...values, fecha_nacimiento: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Obra Social
-            <input
-              required
-              value={values.obra_social}
-              onChange={(e) =>
-                setValues({ ...values, obra_social: e.target.value })
-              }
-            />
-          </label>
-        </fieldset>
-        <input type="submit" value="Modificar Paciente" />
-      </form>
-    </article>
-  );
-};
+    if (!values) return null;
+
+    return (
+        <article>
+            <h2>Modificar Medico</h2>
+
+            <form onSubmit={handleSubmit}>
+                <fieldset>
+                    <label>
+                        Nombre
+                        <input
+                            required
+                            value={values.nombre}
+                            onChange={(e) =>
+                                setValues({ ...values, nombre: e.target.value })
+                            }
+                        />
+                    </label>
+
+                    <label>
+                        Apellido
+                        <input
+                            required
+                            value={values.apellido}
+                            onChange={(e) =>
+                                setValues({ ...values, apellido: e.target.value })
+                            }
+                        />
+                    </label>
+
+                    <label>
+                        Especialidad
+                        <input
+                            required
+                            value={values.especialidad}
+                            onChange={(e) =>
+                                setValues({ ...values, especialidad: e.target.value })
+                            }
+                        />
+                    </label>
+
+                    <label>
+                        Matrícula
+                        <input
+                            required
+                            value={values.matricula_profesional}
+                            onChange={(e) =>
+                                setValues({ ...values, matricula_profesional: e.target.value })
+                            }
+                        />
+                    </label>
+                </fieldset>
+
+                {errores && (
+                    <article style={{ color: "red" }}>
+                        <h4>Errores:</h4>
+                        <ul>
+                            {errores.map((err, i) => (
+                                <li key={i}>{err.msg}</li>
+                            ))}
+                        </ul>
+                    </article>
+                )}
+
+                <input type="submit" value="Modificar Médico" />
+            </form>
+        </article>
+    );
+}

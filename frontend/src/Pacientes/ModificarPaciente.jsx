@@ -17,7 +17,8 @@ export const ModificarPaciente = () => {
       console.log("Error al consultar por paciente:", data.error);
       return;
     }
-    setValues(data.usuario);
+
+    setValues(data.paciente);
   }, [fetchAuth, id]);
 
   useEffect(() => {
@@ -26,7 +27,6 @@ export const ModificarPaciente = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values);
 
     const response = await fetchAuth(`http://localhost:3000/pacientes/${id}`, {
       method: "PUT",
@@ -44,7 +44,7 @@ export const ModificarPaciente = () => {
   };
 
   if (!values) {
-    return null;
+    return <p>Cargando paciente...</p>;
   }
 
   return (
@@ -62,16 +62,20 @@ export const ModificarPaciente = () => {
               }
             />
           </label>
+
           <label>
             Apellido
             <input
               required
               value={values.apellido}
-              onChange={(e) => setValues({ ...values, apellido: e.target.value })}
+              onChange={(e) =>
+                setValues({ ...values, apellido: e.target.value })
+              }
             />
           </label>
+
           <label>
-            Dni
+            DNI
             <input
               required
               value={values.dni}
@@ -80,27 +84,31 @@ export const ModificarPaciente = () => {
               }
             />
           </label>
+
           <label>
-            Fecha de Nacimiento
+            Fecha de nacimiento
             <input
+              type="date"
               required
-              value={values.fecha_nacimiento}
+              value={values.nacimiento}
               onChange={(e) =>
-                setValues({ ...values, fecha_nacimiento: e.target.value })
+                setValues({ ...values, nacimiento: e.target.value })
               }
             />
           </label>
+
           <label>
-            Obra Social
+            Obra social
             <input
               required
-              value={values.obra_social}
+              value={values.obraSocial}
               onChange={(e) =>
-                setValues({ ...values, obra_social: e.target.value })
+                setValues({ ...values, obraSocial: e.target.value })
               }
             />
           </label>
         </fieldset>
+
         <input type="submit" value="Modificar Paciente" />
       </form>
     </article>

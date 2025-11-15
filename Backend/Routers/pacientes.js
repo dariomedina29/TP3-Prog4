@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     res.json({success: true, data: rows});
 });
 
-router.get(":id", validarId, verificarValidaciones, async (req,res)=>{
+router.get("/:id", validarId, verificarValidaciones, async (req,res)=>{
     const {id} = req.params;
 
     const [rows] = await db.execute("SELECT * FROM pacientes WHERE id = ?", [id]);
@@ -42,7 +42,7 @@ router.put("/:id", validarId, validarPaciente, verificarValidaciones, async(req,
     res.status(201).json({success: true, data: {id, nombre, apellido, dni, fecha_nacimiento, obra_social},});
 });
 
-router.delete("/:id", validarId, validarPaciente, verificarValidaciones, async(req, res)=>{
+router.delete("/:id", validarId, verificarValidaciones, async(req, res)=>{
     const id = Number(req.params.id);
 
     await db.execute("DELETE FROM pacientes WHERE id=?", [id]);
